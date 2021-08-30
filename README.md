@@ -6,7 +6,7 @@ More information in the following [article](https://decovar.dev/blog/2018/10/09/
 
 ## Requirements
 
-- Python 3.6 or later
+- Python 3.7 or later
 - image processing tool (*either of*)
     + [ImageMagick](https://imagemagick.org/) (*recommended*)
     + `sips` (*part of the standard Mac OS utilities*)
