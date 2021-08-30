@@ -7,9 +7,9 @@ More information in the following [article](https://decovar.dev/blog/2018/10/09/
 ## Requirements
 
 - Python 3.6 or later
-- image processing tool
-    + [ImageMagick](https://imagemagick.org/)
-    + [sips](https://ss64.com/osx/sips.html) (*part of the standard Mac OS utilities*)
+- image processing tool (*either of*)
+    + [ImageMagick](https://imagemagick.org/) (*recommended*)
+    + `sips` (*part of the standard Mac OS utilities*)
 - `iconutil` tool (*part of the standard Mac OS utilities*)
 
 ## Usage
@@ -18,7 +18,7 @@ More information in the following [article](https://decovar.dev/blog/2018/10/09/
 $ python generate-iconset.py /path/to/original/icon.png
 ```
 
-Resulting (`icon.icns`) will be saved to `/path/to/original/`.
+Resulting `icon.icns` will be saved to `/path/to/original/`.
 
 ## License
 
