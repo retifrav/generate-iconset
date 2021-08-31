@@ -17,10 +17,8 @@ class IconParameters():
 
     def getIconName(self):
         global ext
-        if self.scale != 1:
-            return f"icon_{self.width}x{self.width}{ext}"
-        else:
-            return f"icon_{self.width//2}x{self.width//2}@2x{ext}"
+        scaleString = "" if self.scale == 1 else f"@{self.scale}x"
+        return f"icon_{self.width}x{self.width}{scaleString}{ext}"
 
 
 def generateImageConvertingCommand(forSips, originalPicture, ip, iconsetDir):
@@ -30,15 +28,15 @@ def generateImageConvertingCommand(forSips, originalPicture, ip, iconsetDir):
             "convert",
             originalPicture,
             "-resize",
-            str(ip.width),
+            str(ip.width * ip.scale),
             iconsetDir / ip.getIconName()
         ]
     else:
         return [
             "sips",
             "-z",
-            str(ip.width),
-            str(ip.width),
+            str(ip.width * ip.scale),
+            str(ip.width * ip.scale),
             originalPicture,
             "--out",
             iconsetDir / ip.getIconName()
@@ -150,7 +148,8 @@ def main():
 
     # destination path for output
     destDir = (
-        pathlib.Path(originalPicture).parent if cliArgs.out is None
+        pathlib.Path(originalPicture).parent
+        if cliArgs.out is None
         else pathlib.Path(cliArgs.out)
     )
     if not (destDir.is_dir()):
@@ -199,16 +198,12 @@ def main():
         IconParameters(16, 2),
         IconParameters(32, 1),
         IconParameters(32, 2),
-        IconParameters(64, 1),
-        IconParameters(64, 2),
         IconParameters(128, 1),
         IconParameters(128, 2),
         IconParameters(256, 1),
         IconParameters(256, 2),
         IconParameters(512, 1),
-        IconParameters(512, 2),
-        IconParameters(1024, 1),
-        IconParameters(1024, 2)
+        IconParameters(512, 2)
     ]
 
     print("Converting images for iconset")
