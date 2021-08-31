@@ -7,6 +7,10 @@ import platform
 
 # default iconset files extension, gets the value from original image
 ext = ".png"
+# programs names
+iconutilProgram = "iconutil"
+magickProgram = "magick"
+sipsProgram = "sips"
 
 
 class IconParameters():
@@ -23,10 +27,25 @@ class IconParameters():
         return f"icon_{self.width}x{self.width}{scaleString}{ext}"
 
 
+def checkProgramInPath(programName, errorMsg=None):
+    checkResult = subprocess.run(
+        ["which", programName],
+        capture_output=True,
+        text=True
+    )
+    errorMsgString = "" if errorMsg is None else f". {errorMsg}"
+    if checkResult.returncode != 0:
+        raise SystemExit(
+            f"[ERROR] Couldn't find {programName} in your PATH{errorMsgString}"
+        )
+    else:
+        print(f"Found {programName}: {checkResult.stdout.strip()}")
+
+
 def generateImageConvertingCommand(forSips, originalPicture, ip, iconsetDir):
     if not forSips:
         return [
-            "magick",
+            magickProgram,
             "convert",
             originalPicture,
             "-resize",
@@ -35,7 +54,7 @@ def generateImageConvertingCommand(forSips, originalPicture, ip, iconsetDir):
         ]
     else:
         return [
-            "sips",
+            sipsProgram,
             "-z",
             str(ip.width * ip.scale),
             str(ip.width * ip.scale),
@@ -103,8 +122,8 @@ def main():
                 " ".join((
                     "[ERROR] The script is meant to be executed",
                     "on Mac OS only, as iconutil tool is only available",
-                    "there. You can ignore this condition by passing",
-                    "--ignore-non-mac option"
+                    "there. You can ignore this condition",
+                    "with --ignore-non-mac"
                 ))
             )
         else:
@@ -116,38 +135,18 @@ def main():
                 ))
             )
 
-    # check if iconutil is available in PATH
-    iconutilCheckResult = subprocess.run(
-        ["which", "iconutil"],
-        capture_output=True,
-        text=True
-    )
-    if iconutilCheckResult.returncode != 0:
-        raise SystemExit(
-            "[ERROR] Couldn't find iconutil in your PATH"
-        )
-    else:
-        print(f"Found iconutil: {iconutilCheckResult.stdout.strip()}")
+    checkProgramInPath(iconutilProgram)
 
     if not cliArgs.use_sips:
         print("Will use ImageMagick for converting the original image")
-        # check if ImageMagick is available in PATH
-        magickCheckResult = subprocess.run(
-            ["which", "magick"],
-            capture_output=True,
-            text=True
+        checkProgramInPath(
+            magickProgram,
+            " ".join((
+                "Perhaps, you don't have it installed?",
+                "You can also use sips tool instead",
+                "with --use-sips"
+            ))
         )
-        if magickCheckResult.returncode != 0:
-            raise SystemExit(
-                " ".join((
-                    "[ERROR] Couldn't find ImageMagick in your PATH.",
-                    "Perhaps, you don't have it installed?",
-                    "You can also use sips tool instead,",
-                    "by passing --use-sips option"
-                ))
-            )
-        else:
-            print(f"Found ImageMagick: {magickCheckResult.stdout.strip()}")
     else:
         print("Will use sips for converting the original image")
         print(
@@ -157,18 +156,7 @@ def main():
                 "https://decovar.dev/blog/2019/12/12/imagemagick-vs-sips-resize/"
             ))
         )
-        # check if sips is available in PATH
-        sipsCheckResult = subprocess.run(
-            ["which", "sips"],
-            capture_output=True,
-            text=True
-        )
-        if sipsCheckResult.returncode != 0:
-            raise SystemExit(
-                "[ERROR] Couldn't find sips in your PATH"
-            )
-        else:
-            print(f"Found sips: {sipsCheckResult.stdout.strip()}")
+        checkProgramInPath(sipsProgram)
 
     print()
 
@@ -235,7 +223,7 @@ def main():
                     "already exists, you need to",
                     "delete it first"
                     # "either delete it manually",
-                    # "or provide --delete-tmp-iconset option"
+                    # "or use --delete-tmp-iconset"
                 ))
             )
 
@@ -281,7 +269,7 @@ def main():
     # convert iconset folder to .icns file
     iconutilResult = subprocess.run(
         [
-            "iconutil",
+            iconutilProgram,
             "-c",
             "icns",
             iconsetDir,
