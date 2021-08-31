@@ -116,13 +116,18 @@ def main():
                 ))
             )
 
-    originalPicture = pathlib.Path(cliArgs.image)
-    if not (originalPicture.is_file()):
+    # check if iconutil is available in PATH
+    iconutilCheckResult = subprocess.run(
+        ["which", "iconutil"],
+        capture_output=True,
+        text=True
+    )
+    if iconutilCheckResult.returncode != 0:
         raise SystemExit(
-            f"[ERROR] There is no such image file: {cliArgs.image}"
+            "[ERROR] Couldn't find iconutil in your PATH"
         )
-
-    print(f"Original image: {originalPicture}")
+    else:
+        print(f"Found iconutil: {iconutilCheckResult.stdout.strip()}")
 
     if not cliArgs.use_sips:
         print("Will use ImageMagick for converting the original image")
@@ -166,6 +171,13 @@ def main():
             print(f"Found sips: {sipsCheckResult.stdout.strip()}")
 
     print()
+
+    originalPicture = pathlib.Path(cliArgs.image)
+    if not (originalPicture.is_file()):
+        raise SystemExit(
+            f"[ERROR] There is no such image file: {cliArgs.image}"
+        )
+    print(f"Original image: {originalPicture}")
 
     fname = pathlib.Path(originalPicture).stem
     ext = pathlib.Path(originalPicture).suffix
