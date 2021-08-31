@@ -4,6 +4,7 @@ import argparse
 import subprocess
 import platform
 
+from _version import __version__
 
 # default iconset files extension, gets the value from original image
 ext = ".png"
@@ -68,8 +69,19 @@ def main():
     global ext
 
     argParser = argparse.ArgumentParser(
-        description="Generate an iconset.",
+        prog="generate-iconset",
+        description=" ".join((
+            "%(prog)s  Copyright (C) 2018  retif\nGenerate",
+            "an iconset for a Mac OS application",
+            f"using {iconutilProgram} tool."
+        )),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
         allow_abbrev=False
+    )
+    argParser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}"
     )
     argParser.add_argument(
         "image",
@@ -87,7 +99,7 @@ def main():
     argParser.add_argument(
         "--use-sips",
         action='store_true',
-        help="use sips instead of ImageMagick (default: %(default)s)"
+        help=f"use {sipsProgram} instead of ImageMagick (default: %(default)s)"
     )
     argParser.add_argument(
         "--force-png",
@@ -121,7 +133,7 @@ def main():
             raise SystemExit(
                 " ".join((
                     "[ERROR] The script is meant to be executed",
-                    "on Mac OS only, as iconutil tool is only available",
+                    f"on Mac OS only, as {iconutilProgram} tool is only available",
                     "there. You can ignore this condition",
                     "with --ignore-non-mac"
                 ))
@@ -131,7 +143,7 @@ def main():
                 " ".join((
                     "[WARNING] You are running the script not on Mac OS,",
                     "so it is likely to fail,",
-                    "unless you have iconutil tool installed"
+                    f"unless you have {iconutilProgram} tool installed"
                 ))
             )
 
@@ -143,16 +155,16 @@ def main():
             magickProgram,
             " ".join((
                 "Perhaps, you don't have it installed?",
-                "You can also use sips tool instead",
+                f"You can also use {sipsProgram} tool instead",
                 "with --use-sips"
             ))
         )
     else:
-        print("Will use sips for converting the original image")
+        print(f"Will use {sipsProgram} for converting the original image")
         print(
             " ".join((
                 "[WARNING] ImageMagick provides better quality results,",
-                "so do consider using it instead of sips. More details:",
+                f"so do consider using it instead of {sipsProgram}. More details:",
                 "https://decovar.dev/blog/2019/12/12/imagemagick-vs-sips-resize/"
             ))
         )
@@ -174,7 +186,7 @@ def main():
             print(
                 " ".join((
                     "[WARNING] Original image extension is not .png,",
-                    "iconutil is likely to fail,",
+                    f"{iconutilProgram} is likely to fail,",
                     "pass --force-png to avoid that"
                 ))
             )
@@ -282,7 +294,7 @@ def main():
     if iconutilResult.returncode != 0:
         raise SystemExit(
             " ".join((
-                "[ERROR] iconutil could not generate",
+                f"[ERROR] {iconutilProgram} could not generate",
                 f"an iconset. {iconutilResult.stderr.strip()}"
             ))
         )
