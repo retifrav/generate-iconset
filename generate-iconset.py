@@ -2,6 +2,8 @@ import sys
 import pathlib
 import argparse
 import subprocess
+import platform
+
 
 # default iconset files extension, gets the value from original image
 ext = ".png"
@@ -45,7 +47,11 @@ def generateImageConvertingCommand(forSips, originalPicture, ip, iconsetDir):
 
 def main():
     global ext
-    argParser = argparse.ArgumentParser(description="Generate an iconset.")
+
+    argParser = argparse.ArgumentParser(
+        description="Generate an iconset.",
+        allow_abbrev=False
+    )
     argParser.add_argument(
         "image",
         metavar="/path/image.png",
@@ -72,6 +78,14 @@ def main():
             "to .png (default: %(default)s)"
         ))
     )
+    argParser.add_argument(
+        "--ignore-non-mac",
+        action='store_true',
+        help=" ".join((
+            "allows to run the script on any OS, not only on Mac OS",
+            "(default: %(default)s)"
+        ))
+    )
     # argParser.add_argument(
     #     "--delete-tmp-iconset",
     #     action='store_true',
@@ -82,6 +96,25 @@ def main():
     # )
     cliArgs = argParser.parse_args()
     # print(cliArgs)
+
+    if platform.system() != "Darwin":
+        if not cliArgs.ignore_non_mac:
+            raise SystemExit(
+                " ".join((
+                    "[ERROR] The script is meant to be executed",
+                    "on Mac OS only, as iconutil tool is only available",
+                    "there. You can ignore this condition by passing",
+                    "--ignore-non-mac option"
+                ))
+            )
+        else:
+            print(
+                " ".join((
+                    "[WARNING] You are running the script not on Mac OS,",
+                    "so it is likely to fail,",
+                    "unless you have iconutil tool installed"
+                ))
+            )
 
     originalPicture = pathlib.Path(cliArgs.image)
     if not (originalPicture.is_file()):
@@ -103,7 +136,9 @@ def main():
             raise SystemExit(
                 " ".join((
                     "[ERROR] Couldn't find ImageMagick in your PATH.",
-                    "Perhaps, you don't have it installed?"
+                    "Perhaps, you don't have it installed?",
+                    "You can also use sips tool instead,",
+                    "by passing --use-sips option"
                 ))
             )
         else:
