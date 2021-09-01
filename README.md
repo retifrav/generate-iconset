@@ -24,7 +24,7 @@ Built-in help:
 $ generate-iconset --help
 ```
 
-### Simple example
+### Basic example
 
 ``` sh
 $ generate-iconset /path/to/original/icon.png
