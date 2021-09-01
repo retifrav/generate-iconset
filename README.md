@@ -1,17 +1,10 @@
 # generate-iconset
 
-Generating an iconset (`.icns`) for Mac OS application. Moved from [this repository](https://github.com/retifrav/python-scripts/tree/master/generate-iconset) to become a PyPI package.
+Generating an iconset (`.icns`) for using as an application icon on Mac OS.
 
-More information in the following [article](https://decovar.dev/blog/2018/10/09/macos-convert-png-to-icns/).
+The tool converts an original image into several sizes to form an iconset, which is then converted into `.icns` file with `iconutil` tool. More information in the following [article](https://decovar.dev/blog/2018/10/09/macos-convert-png-to-icns/).
 
-<!-- MarkdownTOC -->
-
-- [Requirements](#requirements)
-- [Usage](#usage)
-    - [Simple example](#simple-example)
-- [License](#license)
-
-<!-- /MarkdownTOC -->
+Moved from [this repository](https://github.com/retifrav/python-scripts/tree/master/generate-iconset) to become a [PyPI package](https://pypi.org/project/generate-iconset/).
 
 ## Requirements
 
@@ -23,23 +16,21 @@ More information in the following [article](https://decovar.dev/blog/2018/10/09/
 
 ## Usage
 
+Below examples assume that you installed the tool from PyPI to use it as a standalone executable. Otherwise you'll need to run it as a regular Python script.
+
 Built-in help:
 
 ``` sh
-$ python generate-iconset.py --help
+$ generate-iconset --help
 ```
 
 ### Simple example
 
 ``` sh
-$ python generate-iconset.py /path/to/original/icon.png
+$ generate-iconset /path/to/original/icon.png
 ```
 
 - will fail to run if it's not Mac OS
 - will use ImageMagick for converting
 - will not force conversion to `.png`, if original image is not `.png`
 - resulting `.icns` will be saved to `/path/to/original/icon.icns`
-
-## License
-
-The project is licensed under [GPLv3](./LICENSE). With the project being a tool, it should not be too difficult to comply with the license terms.

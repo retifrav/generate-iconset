@@ -4,7 +4,7 @@ import argparse
 import subprocess
 import platform
 
-from _version import __version__
+from .version import __version__
 
 # default iconset files extension, gets the value from original image
 ext = ".png"
