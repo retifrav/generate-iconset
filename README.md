@@ -1,10 +1,39 @@
-# generate-iconset
+# Iconset generator
+
+<!-- MarkdownTOC -->
+
+- [About](#about)
+- [Installing](#installing)
+    - [From PyPI](#from-pypi)
+    - [From sources](#from-sources)
+- [Requirements](#requirements)
+- [Usage](#usage)
+    - [Basic example](#basic-example)
+
+<!-- /MarkdownTOC -->
+
+## About
 
 Generating an iconset (`.icns`) for using as an application icon on Mac OS.
 
 The tool converts an original image into several sizes to form an iconset, which is then converted into `.icns` file with `iconutil` tool. More information in the following [article](https://decovar.dev/blog/2018/10/09/macos-convert-png-to-icns/).
 
 Moved from [this repository](https://github.com/retifrav/python-scripts/tree/master/generate-iconset) to become a [PyPI package](https://pypi.org/project/generate-iconset/).
+
+## Installing
+
+### From PyPI
+
+``` sh
+$ pip install generate-iconset
+```
+
+### From sources
+
+``` sh
+$ cd /path/to/repository/
+$ pip install ./
+```
 
 ## Requirements
 
