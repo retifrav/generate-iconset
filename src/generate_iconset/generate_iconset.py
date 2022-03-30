@@ -4,7 +4,7 @@ import argparse
 import subprocess
 import platform
 
-from .version import __version__
+from .version import __version__, __copyright__
 
 # default iconset files extension, gets the value from original image
 ext = ".png"
@@ -71,9 +71,9 @@ def main():
     argParser = argparse.ArgumentParser(
         prog="generate-iconset",
         description=" ".join((
-            "%(prog)s  Copyright (C) 2018  retif\nGenerate",
+            f"%(prog)s\n{__copyright__}\nGenerate",
             "an iconset for a Mac OS application",
-            f"using {iconutilProgram} tool."
+            f"using {iconutilProgram} tool"
         )),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         allow_abbrev=False
